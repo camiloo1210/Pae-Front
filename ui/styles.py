@@ -5,25 +5,22 @@ Inyectado una sola vez desde cada página con inject_global_styles().
 
 # Paleta de colores Premium Tier S+
 COLORS = {
-    "primary":        "#0F766E",   # Teal 700 — Premium dark teal
-    "primary_light":  "#F0FDFA",   # Teal 50
-    "primary_dark":   "#115E59",   # Teal 800
-    "amber":          "#D97706",   # Amber 600
-    "amber_light":    "#FEF3C7",   # Amber 50
-    "red":            "#DC2626",   # Red 600
-    "red_light":      "#FEF2F2",   # Red 50
-    "blue":           "#2563EB",   # Blue 600
-    "blue_light":     "#EFF6FF",   # Blue 50
-    "text_dark":      "#0F172A",   # Slate 900
+    "primary":        "#1E40AF",   # Blue 800 — Enterprise Analytics Primary
+    "background":     "#0F172A",   # Slate 900
+    "surface":        "#1E293B",   # Slate 800
+    "text":           "#1E3A8A",   # Blue 900 — Legible text
     "text_muted":     "#64748B",   # Slate 500
     "border":         "rgba(15, 23, 42, 0.08)",
-    "surface":        "#F8FAFC",   # Slate 50
-    "surface_card":   "#FFFFFF",
+    "surface_light":  "#F8FAFC",   # Slate 50
+    "blue":           "#3B82F6",   # Blue 500 — Secondary
+    "amber":          "#F59E0B",   # Amber 500 — Warning/CTA
+    "red":            "#EF4444",   # Red 500 — Critical
+    "green":          "#10B981",   # Emerald 500 — Success
 }
 
 GLOBAL_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
 /* ── Reset de elementos nativos de Streamlit ─────────────────────── */
@@ -39,7 +36,7 @@ GLOBAL_CSS = """
 
 /* ── Tipografía base ─────────────────────────────────────────────── */
 html, body, [class*="css"] {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     color: #0F172A;
 }
 
@@ -136,7 +133,7 @@ html, body, [class*="css"] {
     background: #FFFFFF;
     border: 1px solid rgba(15,23,42,0.06);
     border-radius: 16px;
-    padding: 24px;
+    padding: 20px;
     position: relative;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -150,7 +147,7 @@ html, body, [class*="css"] {
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 4px;
-    background: var(--accent, #0F766E);
+    background: var(--accent, #1E40AF);
     border-radius: 16px 16px 0 0;
 }
 .kpi-eyebrow {
@@ -178,8 +175,8 @@ html, body, [class*="css"] {
     gap: 6px;
     font-weight: 500;
 }
-.delta-pos { color: #0F766E; font-weight: 600; background: #F0FDFA; padding: 2px 8px; border-radius: 12px; }
-.delta-neg { color: #DC2626; font-weight: 600; background: #FEF2F2; padding: 2px 8px; border-radius: 12px; }
+.delta-pos { color: #1E40AF; font-weight: 600; background: #EFF6FF; padding: 2px 8px; border-radius: 12px; }
+.delta-neg { color: #EF4444; font-weight: 600; background: #FEF2F2; padding: 2px 8px; border-radius: 12px; }
 
 /* ── Section headers ─────────────────────────────────────────────── */
 .section-eyebrow {
@@ -187,7 +184,7 @@ html, body, [class*="css"] {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #0F766E;
+    color: #1E40AF;
     margin-bottom: 6px;
 }
 .section-title {
@@ -239,9 +236,9 @@ html, body, [class*="css"] {
 .alert-name { font-size: 15px; font-weight: 600; color: #0F172A; }
 .alert-meta { font-size: 13px; color: #64748B; margin-top: 4px; }
 .alert-days { font-family: 'Fira Code', monospace; font-size: 24px; font-weight: 700; min-width: 60px; text-align: right; letter-spacing: -0.05em; }
-.alert-days-red   { color: #DC2626; }
-.alert-days-amber { color: #D97706; }
-.alert-days-green { color: #0F766E; }
+.alert-days-red   { color: #EF4444; }
+.alert-days-amber { color: #F59E0B; }
+.alert-days-green { color: #10B981; }
 
 /* ── Resultado del predictor ─────────────────────────────────────── */
 .predictor-result {
@@ -301,19 +298,19 @@ html, body, [class*="css"] {
     color: #475569 !important;
 }
 [data-testid="stFormSubmitButton"] button {
-    background: #0F766E !important;
+    background: #1E40AF !important;
     color: #FFFFFF !important;
     border: none !important;
     border-radius: 12px !important;
     font-weight: 600 !important;
     font-size: 15px !important;
-    padding: 14px 28px !important;
+    padding: 20px 20px !important;
     width: 100%;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 6px -1px rgba(15, 118, 110, 0.3);
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
 }
 [data-testid="stFormSubmitButton"] button:hover {
-    background: #115E59 !important;
+    background: #1D4ED8 !important;
     transform: translateY(-1px);
     box-shadow: 0 6px 8px -1px rgba(15, 118, 110, 0.4);
 }

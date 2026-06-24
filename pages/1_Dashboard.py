@@ -38,18 +38,10 @@ inject_global_styles()
 
 # ── Sidebar ───────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("""
-    <div class="sidebar-logo">
-        <div class="sidebar-logo-dot">🐾</div>
-        <div>
-            <div class="sidebar-logo-text">PAE</div>
-            <div class="sidebar-logo-sub">Sistema de Adopciones</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    st.page_link("Inicio.py",             label="Inicio",       icon="🏠")
-    st.page_link("pages/1_Dashboard.py",  label="Dashboard",    icon="📊")
-    st.page_link("pages/2_Predictor.py",  label="Predictor IA", icon="🔮")
+    st.markdown("NAVEGACIÓN", unsafe_allow_html=False)
+    st.page_link("Inicio.py",              label="Inicio",        icon=":material/home:")
+    st.page_link("pages/1_Dashboard.py",   label="Dashboard",     icon=":material/analytics:")
+    st.page_link("pages/2_Predictor.py",   label="Predictor IA",  icon=":material/online_prediction:")
     st.divider()
 
     st.markdown("FILTROS", unsafe_allow_html=False)
@@ -107,7 +99,7 @@ st.markdown("<div class='pae-divider'></div>", unsafe_allow_html=True)
 
 # ── Tabs: Análisis / Alertas ──────────────────────────────────────────
 tab_analisis, tab_alertas, tab_tabla = st.tabs(
-    ["📈  Análisis", "⚠️  Alertas prioritarias", "🗂️  Datos completos"]
+    ["Análisis", "Alertas prioritarias", "Datos completos"]
 )
 
 # ───────────────────────────────────────────────────────────────────────
@@ -138,8 +130,8 @@ with tab_analisis:
             marker_line_width=0,
         )
         fig_bar.update_layout(
-            plot_bgcolor="white",
-            paper_bgcolor="white",
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
             showlegend=True,
             legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
             xaxis=dict(showgrid=False, showticklabels=False, title=""),
@@ -147,7 +139,7 @@ with tab_analisis:
             margin=dict(l=0, r=40, t=30, b=0),
             height=300,
         )
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, width="stretch")
 
     # Donut — composición del refugio
     with col_donut:
@@ -176,7 +168,7 @@ with tab_analisis:
                 showarrow=False,
             )],
         )
-        st.plotly_chart(fig_donut, use_container_width=True)
+        st.plotly_chart(fig_donut, width="stretch")
 
     st.markdown("<div class='pae-divider'></div>", unsafe_allow_html=True)
 
@@ -191,16 +183,16 @@ with tab_analisis:
             x="Mes_str",
             y="Adopciones",
             line_shape="spline",
-            color_discrete_sequence=[COLORS["primary"]],
+            color_discrete_sequence=[COLORS["blue"]],
         )
         fig_line.update_traces(
             fill="tozeroy",
-            fillcolor="rgba(29,158,117,0.1)",
+            fillcolor="rgba(59, 130, 246, 0.1)",
             line=dict(width=2.5),
         )
         fig_line.update_layout(
-            plot_bgcolor="white",
-            paper_bgcolor="white",
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
             xaxis=dict(title="", showgrid=False),
             yaxis=dict(title="Adopciones", showgrid=True, gridcolor="#F3F4F6"),
             margin=dict(l=0, r=0, t=10, b=0),
@@ -268,7 +260,7 @@ with tab_tabla:
 
     st.dataframe(
         df[cols_disponibles].sort_values("Dias_Estadia", ascending=False),
-        use_container_width=True,
+        width="stretch",
         height=460,
         column_config={
             "Dias_Estadia": st.column_config.NumberColumn("Días en refugio", format="%d días"),

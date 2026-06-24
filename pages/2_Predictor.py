@@ -28,18 +28,10 @@ inject_global_styles()
 
 # ── Sidebar ───────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("""
-    <div class="sidebar-logo">
-        <div class="sidebar-logo-dot">🐾</div>
-        <div>
-            <div class="sidebar-logo-text">PAE</div>
-            <div class="sidebar-logo-sub">Sistema de Adopciones</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    st.page_link("Inicio.py",             label="Inicio",       icon="🏠")
-    st.page_link("pages/1_Dashboard.py",  label="Dashboard",    icon="📊")
-    st.page_link("pages/2_Predictor.py",  label="Predictor IA", icon="🔮")
+    st.markdown("NAVEGACIÓN", unsafe_allow_html=False)
+    st.page_link("Inicio.py",              label="Inicio",        icon=":material/home:")
+    st.page_link("pages/1_Dashboard.py",   label="Dashboard",     icon=":material/analytics:")
+    st.page_link("pages/2_Predictor.py",   label="Predictor IA",  icon=":material/online_prediction:")
     st.divider()
     st.caption(
         "El modelo fue entrenado con datos históricos del refugio. "
@@ -109,7 +101,7 @@ with col_form:
             )
 
         submitted = st.form_submit_button(
-            "⚡ Calcular estadía estimada",
+            "Calcular estadía estimada",
             use_container_width=True,
         )
 
@@ -202,7 +194,9 @@ with col_result:
             text-align: center;
             color: #6B7280;
         ">
-            <div style="font-size: 40px; margin-bottom: 16px;">🔮</div>
+            <div style="font-size: 40px; margin-bottom: 16px;">
+                <span class="material-symbols-outlined" style="font-size: 48px; color: #3B82F6;">online_prediction</span>
+            </div>
             <div style="font-size: 15px; font-weight: 500; color: #374151; margin-bottom: 8px;">
                 Completa el formulario para predecir
             </div>
