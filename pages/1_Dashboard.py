@@ -53,6 +53,11 @@ with st.sidebar:
         ["Excelente", "Bueno", "Regular", "En Tratamiento"],
         default=["Excelente", "Bueno", "Regular", "En Tratamiento"],
     )
+    st.markdown("<br>", unsafe_allow_html=True)
+    busqueda_nombre = st.text_input(
+        "Buscar por nombre",
+        placeholder="Ej: Max, Luna...",
+    )
 
 # ── Cargar y filtrar datos ────────────────────────────────────────────
 try:
@@ -61,10 +66,15 @@ except ValueError as e:
     st.error(f"Error de esquema en el CSV: {e}")
     st.stop()
 
-df = df_raw[
+mask = (
     df_raw["Especie"].isin(especie_filtro) &
     df_raw["Estado_Salud"].isin(estado_filtro)
-].copy()
+)
+
+if busqueda_nombre:
+    mask = mask & df_raw["Nombre"].str.contains(busqueda_nombre, case=False, na=False)
+
+df = df_raw[mask].copy()
 
 if df.empty:
     st.warning("No hay datos con los filtros seleccionados. Amplía los filtros en el panel lateral.")

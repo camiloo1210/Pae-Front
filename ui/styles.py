@@ -69,10 +69,15 @@ html, body, [class*="css"] {
 
 /* Fix sidebar input backgrounds */
 [data-testid="stSidebar"] [data-baseweb="select"] > div,
-[data-testid="stSidebar"] [data-baseweb="input"] > div {
+[data-testid="stSidebar"] [data-baseweb="input"] {
     background-color: #1E293B !important;
     border-color: #334155 !important;
     border-radius: 8px !important;
+    overflow: hidden;
+}
+[data-testid="stSidebar"] [data-baseweb="input"] > div {
+    background-color: transparent !important;
+    border: none !important;
 }
 [data-testid="stSidebar"] [data-baseweb="select"] * {
     color: #F8FAFC !important;
@@ -80,23 +85,30 @@ html, body, [class*="css"] {
 [data-testid="stSidebar"] [data-baseweb="input"] input {
     background-color: transparent !important;
     color: #F8FAFC !important;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%2364748B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>') !important;
+    background-repeat: no-repeat !important;
+    background-position: 12px center !important;
+    padding-left: 40px !important;
 }
 [data-testid="stSidebar"] [data-baseweb="input"] input::placeholder {
+    color: #64748B !important;
+}
+[data-testid="stSidebar"] [data-baseweb="input"] span {
     color: #64748B !important;
 }
 
 /* Style the multi-select tags */
 [data-testid="stSidebar"] span[data-baseweb="tag"] {
-    background-color: #0F766E !important;
-    border: 1px solid #115E59 !important;
-    color: #F0FDFA !important;
+    background-color: #1E40AF !important;
+    border: 1px solid #3B82F6 !important;
+    color: #EFF6FF !important;
     border-radius: 6px !important;
 }
 [data-testid="stSidebar"] span[data-baseweb="tag"] span {
-    color: #F0FDFA !important;
+    color: #EFF6FF !important;
 }
 [data-testid="stSidebar"] span[data-baseweb="tag"] svg {
-    fill: #F0FDFA !important;
+    fill: #EFF6FF !important;
 }
 /* Logo en sidebar */
 .sidebar-logo {
