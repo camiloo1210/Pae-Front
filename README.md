@@ -1,70 +1,55 @@
 # PAE · Sistema de Adopciones con IA
 
-Aplicación Streamlit multipage para predicción y gestión operacional
-de animales en el refugio PAE.
+Aplicación multipágina en Streamlit, diseñada con un enfoque **Tier S+ (Premium Dashboard)**, para la predicción y gestión operacional de animales en el refugio PAE.
 
-## Estructura del proyecto
+## 📁 Estructura del proyecto
 
-```
-pae_app/
-├── 🏠_Inicio.py                  # Entry point
+Todos los archivos se encuentran unificados en el directorio raíz.
+
+```text
+/
+├── Inicio.py                     # Entry point de la aplicación (Portada)
 ├── pages/
-│   ├── 1_📊_Dashboard.py         # Panel operacional con KPIs y alertas
-│   └── 2_🔮_Predictor.py         # Predictor de estadía con IA
+│   ├── 1_Dashboard.py            # Panel operacional con KPIs, alertas y gráficos Plotly
+│   └── 2_Predictor.py            # Predictor de estadía con IA interactivo
 ├── services/
-│   ├── data_service.py           # Acceso a datos históricos (repository pattern)
-│   └── prediction_service.py     # Encapsula el modelo ML
+│   ├── data_service.py           # Acceso y filtrado de datos (repository pattern)
+│   └── prediction_service.py     # Encapsula la inferencia del modelo ML
 ├── ui/
-│   └── styles.py                 # Sistema de diseño CSS (single source of truth)
-├── data/
-│   └── historico_adopciones.csv  # Coloca aquí tu CSV con datos reales
-├── preprocesador_pae.pkl         # ← REQUERIDO: tu preprocesador entrenado
-├── modelo_pae.pkl                # ← REQUERIDO: tu modelo entrenado
-└── requirements.txt
+│   └── styles.py                 # Sistema de diseño CSS Tier S+ (Paleta oscura, Material Icons)
+├── pae_adopciones_sintetico.csv  # Base de datos local (con datos históricos y nombres)
+├── entrenar.py                   # Pipeline ML para regenerar el modelo
+├── preprocesador_pae.pkl         # Transformer/Encoder pre-entrenado
+└── modelo_pae.pkl                # Modelo Random Forest entrenado
 ```
 
-## Instalación
+## 🚀 Ejecución
 
-```bash
-pip install -r requirements.txt
+El proyecto está diseñado para ejecutarse en entornos de Windows utilizando el launcher de Python `py`.
+
+```powershell
+# Ejecutar la aplicación en tu navegador local
+py -m streamlit run Inicio.py
 ```
 
-## Ejecución
+## 📊 Arquitectura y Datos
 
-```bash
-# Desde la carpeta pae_app/
-streamlit run 🏠_Inicio.py
+### Base de Datos (`pae_adopciones_sintetico.csv`)
+La aplicación lee directamente de este archivo a través de `data_service.py` aplicando un esquema estricto (excluyendo datos malformados de forma automática).
+El CSV incluye metadatos visuales como `Nombre`, `Adoptado`, y `Fecha_Ingreso` utilizados exclusivamente para los KPIs y la tabla de alertas del `Dashboard`.
+
+### Pipeline de Machine Learning (`entrenar.py`)
+Para evitar el *Data Leakage* (fuga de datos) al momento de entrenar la Inteligencia Artificial, las columnas exclusivamente informativas (`Nombre`, `Adoptado`, `Fecha_Ingreso`) son **ignoradas explícitamente** durante el entrenamiento.
+Si deseas reentrenar el modelo con nuevos datos en el futuro, simplemente debes ejecutar:
+```powershell
+py entrenar.py
 ```
+Esto sobrescribirá de forma segura `modelo_pae.pkl` y `preprocesador_pae.pkl`.
 
-## Esquema del CSV histórico
+## 🎨 Sistema de Diseño (Tier S+)
 
-El archivo `data/historico_adopciones.csv` debe tener estas columnas:
-
-| Columna              | Tipo     | Valores posibles                              |
-|----------------------|----------|-----------------------------------------------|
-| Nombre               | str      | Nombre del animal                             |
-| Especie              | str      | "Perro" / "Gato"                              |
-| Edad_Meses           | int      | 1 – 240                                       |
-| Peso_Kg              | float    | 0.5 – 80.0                                    |
-| Tamano               | str      | "Pequeño" / "Mediano" / "Grande"              |
-| Estado_Salud         | str      | "Excelente" / "Bueno" / "Regular" / "En Tratamiento" |
-| Nivel_Sociabilidad   | str      | "Alto" / "Medio" / "Bajo"                    |
-| Esterilizado         | str      | "Si" / "No"                                   |
-| Publicaciones        | int      | 0 – 50                                        |
-| Interacciones_RRSS   | int      | 0 – 5000                                      |
-| Fecha_Ingreso        | date     | YYYY-MM-DD                                    |
-| Dias_Estadia         | int      | Días que estuvo/está en el refugio            |
-| Adoptado             | bool     | True / False                                  |
-
-Si el CSV no existe, la app corre en **modo demo** con datos sintéticos realistas
-y muestra un aviso en pantalla.
-
-## Notas técnicas
-
-- El CSS se inyecta desde `ui/styles.py` como single source of truth.
-  Para cambiar colores, solo modifica el dict `COLORS`.
-- El caché de datos (`@st.cache_data(ttl=300)`) refresca cada 5 minutos.
-  Ajusta el TTL según la frecuencia de actualización de tu CSV.
-- Para cambiar la fuente de datos (SQLite, PostgreSQL, API),
-  solo modifica `services/data_service.py` → función `load_historical_data()`.
-  Las páginas no se tocan.
+El proyecto cuenta con un sistema de interfaz avanzado controlado desde `ui/styles.py`:
+- **Cero Emojis Textuales:** La navegación utiliza **Material Symbols** de Google integrados de forma nativa en el código para mantener un look 100% corporativo y profesional.
+- **Paleta de Colores:** Basado en la paleta premium `Teal 700` (`#0F766E`) y `Slate 900` (`#0F172A`).
+- **Tipografía:** Inyecta automáticamente las fuentes web `Inter` (para lectura) y `Fira Code` (para visualización precisa de KPIs).
+- **Adaptabilidad Visual:** Los gráficos de `Plotly` tienen fondos transparentes (`rgba(0,0,0,0)`) que se adaptan orgánicamente al Dashboard sin cajas blancas disruptivas. Todos los selectores están encapsulados con CSS inyectado para fundirse con la barra lateral oscura.

@@ -13,8 +13,8 @@ dataset = pd.read_csv('pae_adopciones_sintetico.csv')
 dataset = dataset.drop_duplicates()
 
 # 2. Separar variables (sin logaritmo, como acordamos)
-y = dataset['Tiempo_Refugio_Dias'].values
-X = dataset.drop(columns=['Tiempo_Refugio_Dias', 'ID_Ingreso'])
+y = dataset['Dias_Estadia'].values
+X = dataset.drop(columns=['Dias_Estadia', 'ID_Ingreso', 'Nombre', 'Adoptado', 'Fecha_Ingreso'])
 
 # 3. Dividir datos
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -38,4 +38,4 @@ regressor.fit(X_train_procesado, y_train)
 joblib.dump(ct, 'preprocesador_pae.pkl')
 joblib.dump(regressor, 'modelo_pae.pkl')
 
-print("✅ ¡Modelos generados y guardados con éxito en tu computadora!")
+print("¡Modelos generados y guardados con éxito en tu computadora!")

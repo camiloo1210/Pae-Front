@@ -93,50 +93,18 @@ def _generate_synthetic_data() -> pd.DataFrame:
 def load_historical_data() -> pd.DataFrame:
     """
     Carga y valida los datos históricos.
-    Adapta el CSV original en memoria para compatibilidad con la UI.
     """
     if not _DATA_PATH.exists():
         st.toast("⚠️ CSV no encontrado — usando datos de demostración", icon="⚠️")
         return _generate_synthetic_data()
 
-    df = pd.read_csv(_DATA_PATH)
-
-    # Adaptar CSV original a esquema requerido
-    if "Tiempo_Refugio_Dias" in df.columns:
-        df = df.rename(columns={"Tiempo_Refugio_Dias": "Dias_Estadia"})
-    
-    if "Nombre" not in df.columns:
-        rng = np.random.default_rng(42)
-        nombres_perros = ["Max","Rex","Luna","Kira","Bruno","Toto","Coco","Lola","Zeus","Nala","Rocky","Mia","Thor","Bella","Duke"]
-        nombres_gatos  = ["Michi","Salem","Cleo","Simba","Nube","Canela","Oreo","Sombra","Tigre","Perla","Gris","Cata","Felix","Mia"]
-        df["Nombre"] = [
-            rng.choice(nombres_perros) if e == "Perro" else rng.choice(nombres_gatos)
-            for e in df["Especie"]
-        ]
-        
-    if "Adoptado" not in df.columns:
-        rng = np.random.default_rng(42)
-        df["Adoptado"] = rng.choice([True, False], size=len(df), p=[0.72, 0.28])
-        
-    if "Fecha_Ingreso" not in df.columns:
-        rng = np.random.default_rng(42)
-        hoy = date.today()
-        fechas = []
-        for i, row in df.iterrows():
-            d = row["Dias_Estadia"]
-            if pd.isna(d): d = 0
-            is_adopted = row["Adoptado"]
-            days_ago = int(d) + (int(rng.integers(0, 30)) if is_adopted else 0)
-            fechas.append(hoy - timedelta(days=days_ago))
-        df["Fecha_Ingreso"] = fechas
-        
-    df["Fecha_Ingreso"] = pd.to_datetime(df["Fecha_Ingreso"])
+    df = pd.read_csv(_DATA_PATH, parse_dates=["Fecha_Ingreso"])
 
     # Validación de esquema
     missing = REQUIRED_COLUMNS - set(df.columns)
     if missing:
         raise ValueError(
-            f"El CSV está incompleto tras adaptación. Columnas faltantes: {missing}. "
+            f"El CSV está incompleto. Columnas faltantes: {missing}. "
         )
 
     # Limpieza defensiva

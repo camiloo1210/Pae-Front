@@ -8,18 +8,22 @@ No sabe nada de joblib, pandas ni el modelo internamente.
 import streamlit as st
 import sys
 from pathlib import Path
+from PIL import Image
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from ui.styles import inject_global_styles, section_header, predictor_result, badge, COLORS
 from services.prediction_service import PredictionInput, predict
 
 # ── Config ────────────────────────────────────────────────────────────
+logo_img = Image.open("public/image 8.png")
 st.set_page_config(
     page_title="PAE · Predictor IA",
-    page_icon="🔮",
+    page_icon=logo_img,
     layout="wide",
     initial_sidebar_state="expanded",
 )
+st.logo("public/image 8.png", icon_image="public/image 8.png")
 inject_global_styles()
 
 # ── Sidebar ───────────────────────────────────────────────────────────

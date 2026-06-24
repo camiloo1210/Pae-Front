@@ -9,6 +9,7 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+from PIL import Image
 
 # Importaciones relativas al proyecto
 import sys
@@ -25,12 +26,14 @@ from services.data_service import (
 )
 
 # ── Config ────────────────────────────────────────────────────────────
+logo_img = Image.open("public/image 8.png")
 st.set_page_config(
     page_title="PAE · Dashboard",
-    page_icon="📊",
+    page_icon=logo_img,
     layout="wide",
     initial_sidebar_state="expanded",
 )
+st.logo("public/image 8.png", icon_image="public/image 8.png")
 inject_global_styles()
 
 # ── Sidebar ───────────────────────────────────────────────────────────
