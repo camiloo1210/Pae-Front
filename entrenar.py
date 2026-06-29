@@ -12,15 +12,15 @@ print("Iniciando entrenamiento local...")
 dataset = pd.read_csv('pae_adopciones_sintetico.csv')
 dataset = dataset.drop_duplicates()
 
-# 2. Separar variables (sin logaritmo, como acordamos)
+# 2. Separar variables
 y = dataset['Dias_Estadia'].values
-X = dataset.drop(columns=['Dias_Estadia', 'ID_Ingreso', 'Nombre', 'Adoptado', 'Fecha_Ingreso'])
+X = dataset.drop(columns=['Dias_Estadia', 'ID_Ingreso', 'Nombre', 'Adoptado', 'Fecha_Ingreso'], errors='ignore')
 
 # 3. Dividir datos
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # 4. Configurar preprocesador
-columnas_categoricas = ['Tamano', 'Estado_Salud', 'Nivel_Sociabilidad', 'Especie', 'Esterilizado']
+columnas_categoricas = ['Tamano', 'Estado_Salud', 'Nivel_Sociabilidad', 'Especie', 'Esterilizado', 'Raza']
 ct = ColumnTransformer(
     transformers=[
         ('encoder', OneHotEncoder(drop='first', sparse_output=False), columnas_categoricas)

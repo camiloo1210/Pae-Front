@@ -57,10 +57,12 @@ col_form, col_result = st.columns([1.1, 0.9], gap="large")
 with col_form:
     with st.form("predictor_form", border=False):
         st.markdown("**Datos generales**")
-        r1c1, r1c2 = st.columns(2)
+        r1c1, r1c2, r1c3 = st.columns(3)
         with r1c1:
             especie = st.selectbox("Especie", ["Perro", "Gato"])
         with r1c2:
+            raza = st.selectbox("Raza", ["Mestizo", "Labrador", "Poodle", "Bulldog", "Pastor Alemán", "Siamés", "Persa", "Angora"])
+        with r1c3:
             tamano = st.selectbox("Tamaño", ["Pequeño", "Mediano", "Grande"])
 
         r2c1, r2c2 = st.columns(2)
@@ -88,7 +90,7 @@ with col_form:
         esterilizado = st.selectbox("¿Esterilizado?", ["Si", "No"])
 
         st.markdown("<div class='pae-divider'></div>", unsafe_allow_html=True)
-        st.markdown("**Visibilidad en redes**")
+        st.markdown("**Visibilidad y Recursos**")
 
         r4c1, r4c2 = st.columns(2)
         with r4c1:
@@ -98,6 +100,16 @@ with col_form:
         with r4c2:
             interacciones = st.number_input(
                 "Interacciones esperadas", min_value=0, max_value=5000, value=200
+            )
+            
+        r5c1, r5c2 = st.columns(2)
+        with r5c1:
+            visitas = st.number_input(
+                "Visitas presenciales", min_value=0, max_value=100, value=5
+            )
+        with r5c2:
+            costos = st.number_input(
+                "Costo mantenimiento ($)", min_value=0.0, max_value=1000.0, value=50.0, step=5.0
             )
 
         submitted = st.form_submit_button(
@@ -111,6 +123,7 @@ with col_result:
         try:
             input_data = PredictionInput(
                 especie=especie,
+                raza=raza,
                 edad_meses=int(edad),
                 peso_kg=float(peso),
                 tamano=tamano,
@@ -119,6 +132,8 @@ with col_result:
                 esterilizado=esterilizado,
                 publicaciones=int(publicaciones),
                 interacciones=int(interacciones),
+                visitas=int(visitas),
+                costos=float(costos),
             )
             result = predict(input_data)
 

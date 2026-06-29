@@ -19,6 +19,7 @@ _MODEL_DIR = Path(__file__).parent.parent
 class PredictionInput:
     """Value Object — garantiza que los datos de entrada estén completos."""
     especie:       str
+    raza:          str
     edad_meses:    int
     peso_kg:       float
     tamano:        str
@@ -27,10 +28,13 @@ class PredictionInput:
     esterilizado:  str
     publicaciones: int
     interacciones: int
+    visitas:       int
+    costos:        float
 
     def to_dataframe(self) -> pd.DataFrame:
         return pd.DataFrame([{
             "Especie":           self.especie,
+            "Raza":              self.raza,
             "Edad_Meses":        self.edad_meses,
             "Peso_Kg":           self.peso_kg,
             "Tamano":            self.tamano,
@@ -39,6 +43,8 @@ class PredictionInput:
             "Esterilizado":      self.esterilizado,
             "Publicaciones":     self.publicaciones,
             "Interacciones_RRSS":self.interacciones,
+            "Visitas_Recibidas": self.visitas,
+            "Costos_Mantenimiento": self.costos,
         }])
 
 

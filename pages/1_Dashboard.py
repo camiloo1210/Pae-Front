@@ -91,17 +91,18 @@ st.markdown(section_header(
 ), unsafe_allow_html=True)
 
 # ── KPI Row ───────────────────────────────────────────────────────────
-k1, k2, k3, k4 = st.columns(4)
+k1, k2, k3, k4, k5 = st.columns(5)
 
-accents = [COLORS["primary"], COLORS["blue"], COLORS["amber"], COLORS["red"]]
+accents = [COLORS["primary"], COLORS["blue"], COLORS["amber"], COLORS["red"], COLORS["green"]]
 kpi_data = [
     ("Animales activos",     str(kpis["total_activos"]),   "", True),
     ("Adopciones este mes",  str(kpis["adoptados_mes"]),   f"Tasa global: {kpis['tasa_adopcion']}%", True),
     ("Estadía promedio",     f"{kpis['estadia_promedio']}d", "días en refugio", True),
     ("Casos larga estadía",  str(kpis["larga_estadia"]),   "Requieren acción", False),
+    ("Costo Activos",        f"${kpis['costo_activos']:,.2f}", "Total estimado", False),
 ]
 
-for col, (eyebrow, value, delta, pos), accent in zip([k1,k2,k3,k4], kpi_data, accents):
+for col, (eyebrow, value, delta, pos), accent in zip([k1,k2,k3,k4,k5], kpi_data, accents):
     with col:
         st.markdown(kpi_card(eyebrow, value, delta, pos, accent), unsafe_allow_html=True)
 
@@ -263,8 +264,8 @@ with tab_tabla:
     st.markdown(f"Mostrando **{len(df):,}** registros con los filtros aplicados.")
 
     display_cols = [
-        "Nombre", "Especie", "Tamano", "Edad_Meses",
-        "Estado_Salud", "Nivel_Sociabilidad", "Dias_Estadia", "Adoptado"
+        "ID_Ingreso", "Nombre", "Especie", "Raza", "Tamano", "Edad_Meses",
+        "Estado_Salud", "Nivel_Sociabilidad", "Costos_Mantenimiento", "Visitas_Recibidas", "Dias_Estadia", "Adoptado"
     ]
     cols_disponibles = [c for c in display_cols if c in df.columns]
 
@@ -276,6 +277,7 @@ with tab_tabla:
             "Dias_Estadia": st.column_config.NumberColumn("Días en refugio", format="%d días"),
             "Adoptado":     st.column_config.CheckboxColumn("Adoptado"),
             "Edad_Meses":   st.column_config.NumberColumn("Edad (meses)"),
+            "Costos_Mantenimiento": st.column_config.NumberColumn("Costo Mantenimiento", format="$%.2f"),
         },
         hide_index=True,
     )

@@ -20,9 +20,10 @@ _DATA_PATH = Path(__file__).parent.parent / "pae_adopciones_sintetico.csv"
 
 # ── Columnas esperadas en el CSV ────────────────────────────────────
 REQUIRED_COLUMNS = {
-    "Nombre", "Especie", "Edad_Meses", "Peso_Kg", "Tamano",
+    "Nombre", "Especie", "Raza", "Edad_Meses", "Peso_Kg", "Tamano",
     "Estado_Salud", "Nivel_Sociabilidad", "Esterilizado",
-    "Publicaciones", "Interacciones_RRSS",
+    "Publicaciones", "Interacciones_RRSS", "Visitas_Recibidas",
+    "Costos_Mantenimiento",
     "Fecha_Ingreso", "Dias_Estadia", "Adoptado",
 }
 
@@ -46,6 +47,13 @@ def _generate_synthetic_data() -> pd.DataFrame:
         for e in especies
     ]
 
+    razas_perros = ["Mestizo", "Labrador", "Poodle", "Bulldog", "Pastor Alemán"]
+    razas_gatos = ["Mestizo", "Siamés", "Persa", "Angora"]
+    razas = [
+        rng.choice(razas_perros, p=[0.6, 0.1, 0.1, 0.1, 0.1]) if e == "Perro" else rng.choice(razas_gatos, p=[0.7, 0.1, 0.1, 0.1])
+        for e in especies
+    ]
+
     tamanos = np.where(
         especies == "Gato",
         rng.choice(["Pequeño","Mediano"], size=n),
@@ -58,23 +66,30 @@ def _generate_synthetic_data() -> pd.DataFrame:
     sociabilidad = rng.choice(["Alto","Medio","Bajo"], size=n, p=[0.5,0.35,0.15])
     esterilizado = rng.choice(["Si","No"], size=n, p=[0.65,0.35])
 
+    visitas_recibidas = rng.integers(0, 15, size=n)
+
     base_dias = 20
     dias = (
         base_dias
         + np.where(especies == "Perro", 5, -5)
+        + np.where(np.array(razas) == "Mestizo", 10, -5) # Mestizos tardan más
         + np.where(tamanos == "Grande", 15, np.where(tamanos == "Mediano", 5, -5))
         + np.where(salud == "En Tratamiento", 20, np.where(salud == "Regular", 8, 0))
         + np.where(sociabilidad == "Bajo", 12, np.where(sociabilidad == "Medio", 4, 0))
         + np.where(esterilizado == "Si", -5, 5)
+        - visitas_recibidas * 2 # Más visitas reducen los días
         + rng.normal(0, 8, size=n)
     ).clip(3, 90).astype(int)
 
+    costos_mantenimiento = (dias * rng.uniform(2.5, 5.0, size=n)).round(2)
+
     hoy = date.today()
-    fechas_ingreso = [hoy - timedelta(days=int(d) + rng.integers(0,30)) for d in dias]
+    fechas_ingreso = [hoy - timedelta(days=int(d) + int(rng.integers(0,30))) for d in dias]
 
     return pd.DataFrame({
         "Nombre":             nombres,
         "Especie":            especies,
+        "Raza":               razas,
         "Edad_Meses":         rng.integers(2, 96, size=n),
         "Peso_Kg":            rng.uniform(1.5, 35, size=n).round(1),
         "Tamano":             tamanos,
@@ -83,6 +98,8 @@ def _generate_synthetic_data() -> pd.DataFrame:
         "Esterilizado":       esterilizado,
         "Publicaciones":      rng.integers(1, 12, size=n),
         "Interacciones_RRSS": rng.integers(50, 800, size=n),
+        "Visitas_Recibidas":  visitas_recibidas,
+        "Costos_Mantenimiento": costos_mantenimiento,
         "Fecha_Ingreso":      fechas_ingreso,
         "Dias_Estadia":       dias,
         "Adoptado":           rng.choice([True, False], size=n, p=[0.72, 0.28]),
@@ -128,9 +145,10 @@ def get_kpi_summary(df: pd.DataFrame) -> dict:
     return {
         "total_activos":      len(activos),
         "adoptados_mes":      len(adoptados_mes),
-        "estadia_promedio":   round(activos["Dias_Estadia"].mean(), 1),
+        "estadia_promedio":   round(activos["Dias_Estadia"].mean(), 1) if not activos.empty else 0,
         "larga_estadia":      len(larga_estadia),
-        "tasa_adopcion":      round(df["Adoptado"].mean() * 100, 1),
+        "costo_activos":      round(activos["Costos_Mantenimiento"].sum(), 2) if "Costos_Mantenimiento" in activos.columns else 0,
+        "tasa_adopcion":      round(df["Adoptado"].mean() * 100, 1) if not df.empty else 0,
     }
 
 
