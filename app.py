@@ -4,7 +4,7 @@ import numpy as np
 import joblib
 
 # 1. Configuración de la página (El "shadcn" de Streamlit)
-st.set_page_config(page_title="PAE - IA Adopciones", page_icon="🐾", layout="centered")
+st.set_page_config(page_title="PAE - Predictor de Adopciones", page_icon="🐾", layout="centered")
 
 # 2. Cargar los modelos entrenados
 @st.cache_resource

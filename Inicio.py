@@ -23,7 +23,7 @@ with st.sidebar:
     st.markdown("NAVEGACIÓN", unsafe_allow_html=False)
     st.page_link("Inicio.py",              label="Inicio",        icon=":material/home:")
     st.page_link("pages/1_Dashboard.py",   label="Dashboard",     icon=":material/analytics:")
-    st.page_link("pages/2_Predictor.py",   label="Predictor IA",  icon=":material/online_prediction:")
+    st.page_link("pages/2_Predictor.py",   label="Predictor",  icon=":material/online_prediction:")
 
     st.divider()
     st.caption("Versión 2.0 · PAE Ecuador")
@@ -36,11 +36,11 @@ col_hero, col_empty, col_img = st.columns([1.2, 0.1, 1])
 with col_hero:
     st.html("""
         <div class="hero-title">
-            Revolucionando el cuidado animal con <span>Datos e IA.</span>
+            Revolucionando el cuidado animal con <span>Análisis de Datos.</span>
         </div>
         <div class="hero-subtitle">
-            El Sistema PAE centraliza la operación del refugio en tiempo real. 
-            Nuestra IA predice la estadía de cada animal, identifica casos críticos 
+            Nuestro modelo centraliza la operación del refugio en tiempo real. 
+            Esta herramienta predice la estadía de cada animal, identifica casos críticos 
             antes de que se agraven y optimiza las adopciones para salvar más vidas.
         </div>
     """)
@@ -55,7 +55,7 @@ with col_hero:
     with c2:
         st.page_link(
             "pages/2_Predictor.py",
-            label="Probar Predictor IA",
+            label="Probar Predictor",
             icon=":material/magic_button:",
         )
 

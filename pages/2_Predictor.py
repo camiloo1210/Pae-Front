@@ -1,5 +1,5 @@
 """
-🔮 Predictor IA — Estimación de tiempo de estadía.
+🔮 Predictor — Estimación de tiempo de estadía.
 
 UI desacoplada: solo conoce PredictionInput y PredictionResult.
 No sabe nada de joblib, pandas ni el modelo internamente.
@@ -18,7 +18,7 @@ from services.prediction_service import PredictionInput, predict
 # ── Config ────────────────────────────────────────────────────────────
 logo_img = Image.open("public/image 8.png")
 st.set_page_config(
-    page_title="PAE · Predictor IA",
+    page_title="PAE · Predictor",
     page_icon=logo_img,
     layout="wide",
     initial_sidebar_state="expanded",
@@ -31,7 +31,7 @@ with st.sidebar:
     st.markdown("NAVEGACIÓN", unsafe_allow_html=False)
     st.page_link("Inicio.py",              label="Inicio",        icon=":material/home:")
     st.page_link("pages/1_Dashboard.py",   label="Dashboard",     icon=":material/analytics:")
-    st.page_link("pages/2_Predictor.py",   label="Predictor IA",  icon=":material/online_prediction:")
+    st.page_link("pages/2_Predictor.py",   label="Predictor",  icon=":material/online_prediction:")
     st.divider()
     st.caption(
         "El modelo fue entrenado con datos históricos del refugio. "

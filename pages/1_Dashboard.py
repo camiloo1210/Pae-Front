@@ -41,7 +41,7 @@ with st.sidebar:
     st.markdown("NAVEGACIÓN", unsafe_allow_html=False)
     st.page_link("Inicio.py",              label="Inicio",        icon=":material/home:")
     st.page_link("pages/1_Dashboard.py",   label="Dashboard",     icon=":material/analytics:")
-    st.page_link("pages/2_Predictor.py",   label="Predictor IA",  icon=":material/online_prediction:")
+    st.page_link("pages/2_Predictor.py",   label="Predictor",  icon=":material/online_prediction:")
     st.divider()
 
     st.markdown("FILTROS", unsafe_allow_html=False)

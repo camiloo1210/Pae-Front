@@ -3,7 +3,7 @@ PAE Design System — CSS tokens y estilos globales.
 Inyectado una sola vez desde cada página con inject_global_styles().
 """
 
-# Paleta de colores Premium Tier S+
+# Paleta de colores principal
 COLORS = {
     "primary":        "#1E40AF",   # Blue 800 — Enterprise Analytics Primary
     "background":     "#0F172A",   # Slate 900
@@ -40,7 +40,7 @@ html, body, [class*="css"] {
     color: #0F172A;
 }
 
-/* ── Sidebar premium ─────────────────────────────────────────────── */
+/* ── Sidebar ─────────────────────────────────────────────── */
 [data-testid="stSidebar"] {
     background: #0F172A !important; /* Slate 900 */
     border-right: 1px solid #1E293B !important;
@@ -505,7 +505,7 @@ def predictor_result(days: int) -> str:
 
     return f"""
     <div class="predictor-result">
-        <div class="predictor-label">Predicción del modelo IA</div>
+        <div class="predictor-label">Predicción del modelo</div>
         <div class="predictor-number">{int(days)}</div>
         <div class="predictor-unit">días estimados en refugio</div>
         <div class="predictor-status {status_class}">
