@@ -36,12 +36,18 @@ st.set_page_config(
 st.logo("public/image 8.png", icon_image="public/image 8.png")
 inject_global_styles()
 
+# Forzar limpieza de caché para actualizar el CSV
+st.cache_data.clear()
+
 # ── Sidebar ───────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("NAVEGACIÓN", unsafe_allow_html=False)
     st.page_link("Inicio.py",              label="Inicio",        icon=":material/home:")
     st.page_link("pages/1_Dashboard.py",   label="Dashboard",     icon=":material/analytics:")
     st.page_link("pages/2_Predictor.py",   label="Predictor",  icon=":material/online_prediction:")
+    st.page_link("pages/3_Evaluacion.py",  label="Evaluación",    icon=":material/query_stats:")
+    st.page_link("pages/4_Registro.py",    label="Registro",      icon=":material/app_registration:")
+    st.page_link("pages/5_Gestion.py",     label="Gestión",       icon=":material/manage_accounts:")
     st.divider()
 
     st.markdown("FILTROS", unsafe_allow_html=False)

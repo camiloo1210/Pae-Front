@@ -32,6 +32,9 @@ with st.sidebar:
     st.page_link("Inicio.py",              label="Inicio",        icon=":material/home:")
     st.page_link("pages/1_Dashboard.py",   label="Dashboard",     icon=":material/analytics:")
     st.page_link("pages/2_Predictor.py",   label="Predictor",  icon=":material/online_prediction:")
+    st.page_link("pages/3_Evaluacion.py",  label="Evaluación",    icon=":material/query_stats:")
+    st.page_link("pages/4_Registro.py",    label="Registro",      icon=":material/app_registration:")
+    st.page_link("pages/5_Gestion.py",     label="Gestión",       icon=":material/manage_accounts:")
     st.divider()
     st.caption(
         "El modelo fue entrenado con datos históricos del refugio. "
@@ -55,8 +58,10 @@ st.markdown("<br>", unsafe_allow_html=True)
 col_form, col_result = st.columns([1.1, 0.9], gap="large")
 
 with col_form:
+    libre = st.toggle("Desactivar validaciones de límites", value=False, help="Permite ingresar valores extremos para probar la extrapolación del modelo.")
     with st.form("predictor_form", border=False):
         st.markdown("**Datos generales**")
+
         r1c1, r1c2, r1c3 = st.columns(3)
         with r1c1:
             especie = st.selectbox("Especie", ["Perro", "Gato"])
@@ -67,10 +72,9 @@ with col_form:
 
         r2c1, r2c2 = st.columns(2)
         with r2c1:
-            edad = st.number_input("Edad (meses)", min_value=1, max_value=240, value=12)
+            edad = st.number_input("Edad (meses)", min_value=None if libre else 1, max_value=None if libre else 240, value=12)
         with r2c2:
-            peso = st.number_input("Peso (kg)", min_value=0.5, max_value=80.0,
-                                   value=10.0, step=0.5)
+            peso = st.number_input("Peso (kg)", min_value=None if libre else 0.5, max_value=None if libre else 80.0, value=10.0, step=0.5)
 
         st.markdown("<div class='pae-divider'></div>", unsafe_allow_html=True)
         st.markdown("**Estado y comportamiento**")
@@ -95,21 +99,21 @@ with col_form:
         r4c1, r4c2 = st.columns(2)
         with r4c1:
             publicaciones = st.number_input(
-                "Campañas / publicaciones", min_value=0, max_value=50, value=3
+                "Campañas / publicaciones", min_value=None if libre else 0, max_value=None if libre else 50, value=3
             )
         with r4c2:
             interacciones = st.number_input(
-                "Interacciones esperadas", min_value=0, max_value=5000, value=200
+                "Interacciones esperadas", min_value=None if libre else 0, max_value=None if libre else 5000, value=200
             )
             
         r5c1, r5c2 = st.columns(2)
         with r5c1:
             visitas = st.number_input(
-                "Visitas presenciales", min_value=0, max_value=100, value=5
+                "Visitas presenciales", min_value=None if libre else 0, max_value=None if libre else 100, value=5
             )
         with r5c2:
             costos = st.number_input(
-                "Costo mantenimiento ($)", min_value=0.0, max_value=1000.0, value=50.0, step=5.0
+                "Costo mantenimiento ($)", min_value=None if libre else 0.0, max_value=None if libre else 1000.0, value=50.0, step=5.0
             )
 
         submitted = st.form_submit_button(

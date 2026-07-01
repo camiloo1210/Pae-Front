@@ -110,6 +110,7 @@ def _generate_synthetic_data() -> pd.DataFrame:
 def load_historical_data() -> pd.DataFrame:
     """
     Carga y valida los datos históricos.
+    (Cache invalidada para recargar los nombres actualizados)
     """
     if not _DATA_PATH.exists():
         st.toast("⚠️ CSV no encontrado — usando datos de demostración", icon="⚠️")
@@ -186,3 +187,88 @@ def get_monthly_adoptions(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index(name="Adopciones")
         .tail(12)  # Últimos 12 meses
     )
+
+
+def add_new_animal(record_data: dict) -> str:
+    """
+    Agrega un nuevo animal al archivo CSV histórico.
+    Asigna un ID automático, establece los valores base de un ingreso nuevo,
+    y vacía la caché de Streamlit para que el Dashboard lo refleje al instante.
+    Retorna el ID_Ingreso generado.
+    """
+    if not _DATA_PATH.exists():
+        df = pd.DataFrame([record_data])
+        df.to_csv(_DATA_PATH, index=False)
+        return record_data.get("ID_Ingreso", "PAE-00001")
+
+    # Leer archivo completo
+    df = pd.read_csv(_DATA_PATH)
+    
+    # Autogenerar ID_Ingreso secuencial
+    if not df.empty and 'ID_Ingreso' in df.columns:
+        last_id = df['ID_Ingreso'].str.extract(r'PAE-(\d+)')[0].dropna()
+        if not last_id.empty:
+            next_num = last_id.astype(int).max() + 1
+        else:
+            next_num = 1
+    else:
+        next_num = 1
+        
+    generated_id = f"PAE-{next_num:05d}"
+    record_data['ID_Ingreso'] = generated_id
+    
+    # Completar campos predeterminados para un nuevo ingreso
+    record_data['Adoptado'] = False
+    record_data['Dias_Estadia'] = 0
+    record_data['Fecha_Ingreso'] = date.today().strftime("%Y-%m-%d")
+    record_data.setdefault('Publicaciones', 1)
+    record_data.setdefault('Interacciones_RRSS', 0)
+    record_data.setdefault('Visitas_Recibidas', 0)
+    record_data.setdefault('Costos_Mantenimiento', 0.0)
+
+    # Crear nuevo DF de 1 fila
+    new_row = pd.DataFrame([record_data])
+    
+    # Asegurarse que las columnas coincidan en orden
+    for col in df.columns:
+        if col not in new_row.columns:
+            new_row[col] = np.nan
+    new_row = new_row[df.columns]
+    
+    # Concatenar y guardar
+    df_updated = pd.concat([df, new_row], ignore_index=True)
+    df_updated.to_csv(_DATA_PATH, index=False)
+    
+    # Limpiar caché de lectura para que el dashboard lo vea inmediatamente
+    load_historical_data.clear()
+    
+    return generated_id
+
+
+def update_animal(id_ingreso: str, updated_data: dict) -> bool:
+    """
+    Actualiza los datos de un animal existente en el CSV histórico.
+    """
+    if not _DATA_PATH.exists():
+        return False
+        
+    df = pd.read_csv(_DATA_PATH)
+    
+    if 'ID_Ingreso' not in df.columns:
+        return False
+        
+    mask = df['ID_Ingreso'] == id_ingreso
+    if not mask.any():
+        return False
+        
+    # Actualizar solo las columnas que se pasan en el diccionario
+    for key, value in updated_data.items():
+        if key in df.columns:
+            df.loc[mask, key] = value
+            
+    df.to_csv(_DATA_PATH, index=False)
+    
+    # Vaciar caché para que Streamlit refleje los cambios en todas las vistas
+    load_historical_data.clear()
+    
+    return True
